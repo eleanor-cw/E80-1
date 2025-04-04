@@ -4,7 +4,7 @@
 clear;
 %clf;
 
-filenum = '076'; % file number for the data you want to read
+filenum = '121'; % file number for the data you want to read
 infofile = strcat('INF', filenum, '.TXT');
 datafile = strcat('LOG', filenum, '.BIN');
 
@@ -46,6 +46,3 @@ end
 fclose(fid);
 
 %% Process your data here
-
-
-

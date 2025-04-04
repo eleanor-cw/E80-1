@@ -53,7 +53,12 @@ void SurfaceControl::navigate(xy_state_t * state, gps_state_t * gps_state_p, int
     // You can access the yaw calculated in XYStateEstimator.cpp using state->yaw
 
     ///////////////////////////////////////////////////////////
-    // INSERT P CONTROL CODE HERE
+   yaw_des = atan2(y_des - state->y, x_des - state->x);
+   yaw = state->yaw;
+   // yaw_error = angleDiff(yaw_des- state->yaw);
+   u = angleDiff(yaw_des - yaw)*Kp;
+   uR = max(0.0, min(255.0, (avgPower+u)*Kr));
+   uL = max(0.0, min(255.0, (avgPower-u)*Kl));
     ///////////////////////////////////////////////////////////
     
   }
@@ -72,7 +77,7 @@ String SurfaceControl::printString(void) {
     printString += "SurfaceControl: Waiting to acquire more satellites...";
   }
   else {
-    printString += "SurfaceControl: ";
+    // printString += "SurfaceControl: ";
     printString += "Yaw_Des: ";
     printString += String(yaw_des*180.0/PI);
     printString += "[deg], ";

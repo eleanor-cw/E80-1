@@ -53,13 +53,12 @@ void SurfaceControl::navigate(xy_state_t * state, gps_state_t * gps_state_p, int
     // You can access the yaw calculated in XYStateEstimator.cpp using state->yaw
 
     ///////////////////////////////////////////////////////////
-   yaw_des = atan2(y_des - state->y, x_des - state->x)
-   yaw_error = angleDiff(yaw_des- state->yaw)
-   u = yaw_error*Kp
-   uL= avgPower - u
-   uR= avgPower + u
-   uR = uR*Kr
-   uL = uL*Kl
+   yaw_des = atan2(y_des - state->y, x_des - state->x);
+   yaw = state->yaw;
+   // yaw_error = angleDiff(yaw_des- state->yaw);
+   u = angleDiff(yaw_des - yaw)*Kp;
+   uR = max(0.0, min(255.0, (avgPower+u)*Kr));
+   uL = max(0.0, min(255.0, (avgPower-u)*Kl));
     ///////////////////////////////////////////////////////////
     
   }
