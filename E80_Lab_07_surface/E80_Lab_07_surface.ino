@@ -43,6 +43,8 @@ Logger logger;
 Printer printer;
 GPSLockLED led;
 
+float angle;
+
 // loop start recorder
 int loopStartTime;
 int currentTime;
@@ -75,7 +77,7 @@ void setup() {
 
   const int num_surface_waypoints = 3; // Set to 0 if only doing depth control
   double surface_waypoints [] = { 125, -40, 150, -40, 125, -40 };   // listed as x0,y0,x1,y1, ... etc.
-  surface_control.init(num_surface_waypoints, surface_waypoints, navigateDelay);
+  surface_control.init();
   
   xy_state_estimator.init(); 
 
@@ -106,7 +108,7 @@ void loop() {
     printer.printValue(2,logger.printState());
     printer.printValue(3,gps.printState());   
     printer.printValue(4,xy_state_estimator.printState());  
-    printer.printValue(5,surface_control.printWaypointUpdate());
+    // printer.printValue(5,surface_control.printWaypointUpdate());
     printer.printValue(6,surface_control.printString());
     printer.printValue(7,motor_driver.printState());
     printer.printValue(8,imu.printRollPitchHeading());        
@@ -116,24 +118,32 @@ void loop() {
 
   /// SURFACE CONTROL FINITE STATE MACHINE///
   if ( currentTime-surface_control.lastExecutionTime > LOOP_PERIOD ) {
+
+    // 
     surface_control.lastExecutionTime = currentTime;
-    if ( surface_control.navigateState ) { // NAVIGATE STATE //
-      if ( !surface_control.atPoint ) { 
-        surface_control.navigate(&xy_state_estimator.state, &gps.state, currentTime);
-      }
-      else if ( surface_control.complete ) { 
-        delete[] surface_control.wayPoints; // destroy surface waypoint array from the Heap
-      }
-      else {
-        surface_control.atPoint = false;   // get ready to go to the next point
-      }
+    // if ( surface_control.navigateState ) { // NAVIGATE STATE //
+    //   if ( !surface_control.atPoint ) { 
+     surface_control.navigate(&xy_state_estimator.state, angle, currentTime);
+    //   }
+    //   else if ( surface_control.complete ) { 
+    //     delete[] surface_control.wayPoints; // destroy surface waypoint array from the Heap
+    //   }
+    //   else {
+    //     surface_control.atPoint = false;   // get ready to go to the next point
+    //   }
       motor_driver.drive(surface_control.uL,surface_control.uR,0);
-    }
+   // }
   }
   
   if ( currentTime-adc.lastExecutionTime > LOOP_PERIOD ) {
     adc.lastExecutionTime = currentTime;
     adc.updateSample(); 
+    const float Vmin = 0.1;
+    const float Vmax = 3.1;
+    int teensy_angle = analogRead(A0);  // assume this returns teensy units/bits 
+    float voltage = teensy_angle*(3.3/1023); //Convert teensy unit to voltage
+    voltage = constrain(voltage, Vmin, Vmax);  // valid sensor range
+    angle = (voltage - Vmin) * (360.0 / (Vmax-Vmin))*(PI/180);  // map Vmin–Vmax to 0–360° 
   }
 
   if ( currentTime-ef.lastExecutionTime > LOOP_PERIOD ) {
