@@ -74,10 +74,10 @@ void loop() {
   //       void motorDriver.drive(int motorA_power,int motorB_power,int motorC_power); 
   // the value of motorX_power can range from -255 to 255, and sets the PWM applied to the motor 
   // The following example will turn on motor B for four seconds between seconds 4 and 8 
-  if (currentTime > 30000 && currentTime <60000) {
-    motorDriver.drive(60,60,60);
-    }else if (currentTime >60000 && currentTime <80000){
-    motorDriver.drive(-60,-60,-60);
+  if (currentTime > 20000 && currentTime <25000) {
+    motorDriver.drive(90,90,90);
+    }else if (currentTime >25000 && currentTime <30000){
+    motorDriver.drive(-90,-90,-69);
     }
   else {
     motorDriver.drive(0,0,0);

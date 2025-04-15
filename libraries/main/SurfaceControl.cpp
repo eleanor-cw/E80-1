@@ -55,9 +55,9 @@ void SurfaceControl::navigate(xy_state_t * state, float angle_in, int currentTim
     // You can access the yaw calculated in XYStateEstimator.cpp using state->yaw
 
     ///////////////////////////////////////////////////////////     
-   yaw_des = angleDiff(angle);//output rotary sensor;
-   yaw = state->yaw;
-   yaw_error = angleDiff(yaw_des- state->yaw); // or angle if pot
+  //  yaw_des = angleDiff(angle);//output rotary sensor;
+  //  yaw = state->yaw;
+   yaw_error = angleDiff(angle); // or angle if pot
    u = yaw_error*Kp;
    uR = max(0.0, min(255.0, (avgPower+u)*Kr));
    uL = max(0.0, min(255.0, (avgPower-u)*Kl));

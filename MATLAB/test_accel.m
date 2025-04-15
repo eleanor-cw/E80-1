@@ -1,7 +1,9 @@
-figure(3)
-plot(accelX, 'b')
+clf
+figure(1)
+plot(accelX)
 hold on
-plot(accelY, 'r')
-plot(accelZ, 'g')
-plot(motorA,'y')
-xlim([279, 393])
+plot(accelY)
+plot(accelZ)
+plot(motorA)
+xlim([272, 445])
+legend('x', 'y', 'z', 'motor')
