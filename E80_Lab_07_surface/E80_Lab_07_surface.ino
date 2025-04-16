@@ -138,9 +138,9 @@ void loop() {
   if ( currentTime-adc.lastExecutionTime > LOOP_PERIOD ) {
     adc.lastExecutionTime = currentTime;
     adc.updateSample(); 
-    const float Vmin = 0.1;
-    const float Vmax = 3.1;
-    int teensy_angle = analogRead(A0);  // assume this returns teensy units/bits 
+    const float Vmin = 0.37;
+    const float Vmax = 3.25;
+    int teensy_angle = analogRead(A13);  // assume this returns teensy units/bits 
     float voltage = teensy_angle*(3.3/1023); //Convert teensy unit to voltage
     voltage = constrain(voltage, Vmin, Vmax);  // valid sensor range
     angle = (voltage - Vmin) * (360.0 / (Vmax-Vmin))*(PI/180);  // map Vmin–Vmax to 0–360° 
