@@ -75,8 +75,8 @@ void setup() {
 
   int navigateDelay = 0; // how long robot will stay at surface waypoint before continuing (ms)
 
-  const int num_surface_waypoints = 3; // Set to 0 if only doing depth control
-  double surface_waypoints [] = { 125, -40, 150, -40, 125, -40 };   // listed as x0,y0,x1,y1, ... etc.
+  // const int num_surface_waypoints = 3; // Set to 0 if only doing depth control
+  // double surface_waypoints [] = { 125, -40, 150, -40, 125, -40 };   // listed as x0,y0,x1,y1, ... etc.
   surface_control.init();
   
   xy_state_estimator.init(); 
@@ -131,7 +131,7 @@ void loop() {
     //   else {
     //     surface_control.atPoint = false;   // get ready to go to the next point
     //   }
-      motor_driver.drive(surface_control.uL,surface_control.uR,0);
+      motor_driver.drive(surface_control.uL,surface_control.uR,30);
    // }
   }
   
@@ -143,7 +143,7 @@ void loop() {
     int teensy_angle = analogRead(A13);  // assume this returns teensy units/bits 
     float voltage = teensy_angle*(3.3/1023); //Convert teensy unit to voltage
     voltage = constrain(voltage, Vmin, Vmax);  // valid sensor range
-    angle = (voltage - Vmin) * (360.0 / (Vmax-Vmin))*(PI/180);  // map Vmin–Vmax to 0–360° 
+    angle = (voltage - Vmin) * (360.0 / (Vmax-Vmin))*(PI/180);  // map Vmin–Vmax to 0–2pi radians 
   }
 
   if ( currentTime-ef.lastExecutionTime > LOOP_PERIOD ) {
