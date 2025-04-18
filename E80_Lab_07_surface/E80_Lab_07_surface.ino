@@ -116,6 +116,13 @@ void loop() {
     printer.printToSerial();  // To stop printing, just comment this line out
   }
 
+  //  if (currentTime >1000 && currentTime <6000) {
+  //    motorDriver.drive(90,90,90);
+  // }
+  //    else {
+  //    motorDriver.drive(0,0,0);
+  //    }
+
   /// SURFACE CONTROL FINITE STATE MACHINE///
   if ( currentTime-surface_control.lastExecutionTime > LOOP_PERIOD ) {
 
@@ -131,19 +138,26 @@ void loop() {
     //   else {
     //     surface_control.atPoint = false;   // get ready to go to the next point
     //   }
-      motor_driver.drive(surface_control.uL,surface_control.uR,30);
-   // }
+       if (currentTime < 60000) {
+            motor_driver.drive(0,0,0);
+   }
+      else {
+      motor_driver.drive(surface_control.uR,30,surface_control.uL);
+    }
   }
   
   if ( currentTime-adc.lastExecutionTime > LOOP_PERIOD ) {
     adc.lastExecutionTime = currentTime;
     adc.updateSample(); 
-    const float Vmin = 0.37;
-    const float Vmax = 3.25;
-    int teensy_angle = analogRead(A13);  // assume this returns teensy units/bits 
-    float voltage = teensy_angle*(3.3/1023); //Convert teensy unit to voltage
-    voltage = constrain(voltage, Vmin, Vmax);  // valid sensor range
-    angle = (voltage - Vmin) * (360.0 / (Vmax-Vmin))*(PI/180);  // map Vmin–Vmax to 0–2pi radians 
+    const float Vminw = 0.37;
+    const float Vmaxw = 3.25;
+    int teensy_angle = analogRead(A1);  // assume this returns teensy units/bits 
+    //teensy angle-> wind angle
+    float angle_voltage = teensy_angle*(3.3/1023); //Convert teensy unit to voltage
+    angle_voltage = constrain(angle_voltage, Vminw, Vmaxw);  // valid sensor range
+    angle = (angle_voltage - Vminw) * (360.0 / (Vmaxw-Vminw))*(PI/180);  // map Vmin–Vmax to 0–2pi radians 
+    //teensy_pressure-> mass
+  
   }
 
   if ( currentTime-ef.lastExecutionTime > LOOP_PERIOD ) {
