@@ -27,6 +27,7 @@ Authors:
 #include <SurfaceControl.h>
 #define UartSerial Serial1
 #include <GPSLockLED.h>
+#include <PowerSensorSampler.h>
 
 /////////////////////////* Global Variables *////////////////////////
 
@@ -42,6 +43,7 @@ SensorIMU imu;
 Logger logger;
 Printer printer;
 GPSLockLED led;
+PowerSensorSampler power_sampler;
 
 float angle;
 
@@ -61,12 +63,14 @@ void setup() {
   logger.include(&motor_driver);
   logger.include(&adc);
   logger.include(&ef);
-  logger.include(&button_sampler);
+  //logger.include(&button_sampler);
+  logger.include(&power_sampler)
   logger.init();
 
   printer.init();
   ef.init();
   button_sampler.init();
+  power_sampler.init();
   imu.init();
   UartSerial.begin(9600);
   gps.init(&GPS);
@@ -83,6 +87,7 @@ void setup() {
 
   printer.printMessage("Starting main loop",10);
   loopStartTime = millis();
+  power_sampler.lastExecutionTime     = loopStartTime - LOOP_PERIOD;
   printer.lastExecutionTime            = loopStartTime - LOOP_PERIOD + PRINTER_LOOP_OFFSET ;
   imu.lastExecutionTime                = loopStartTime - LOOP_PERIOD + IMU_LOOP_OFFSET;
   adc.lastExecutionTime                = loopStartTime - LOOP_PERIOD + ADC_LOOP_OFFSET;
@@ -104,7 +109,8 @@ void loop() {
   if ( currentTime-printer.lastExecutionTime > LOOP_PERIOD ) {
     printer.lastExecutionTime = currentTime;
     printer.printValue(0,adc.printSample());
-    printer.printValue(1,button_sampler.printState());
+   // printer.printValue(1,button_sampler.printState());
+    printer.printValue(1,power_sampler.printState());
     printer.printValue(2,logger.printState());
     printer.printValue(3,gps.printState());   
     printer.printValue(4,xy_state_estimator.printState());  
@@ -179,6 +185,11 @@ void loop() {
   if ( currentTime-button_sampler.lastExecutionTime > LOOP_PERIOD ) {
     button_sampler.lastExecutionTime = currentTime;
     button_sampler.updateState();
+  }
+
+  if ( currentTime - power_sampler.lastExecutionTime > LOOP_PERIOD){
+    power_sampler.lastExecutionTime = currentTime;
+    power_sampler.updateState();
   }
 
   if ( currentTime-imu.lastExecutionTime > LOOP_PERIOD ) {
