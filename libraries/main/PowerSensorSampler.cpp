@@ -4,7 +4,7 @@
 extern Printer printer;
 
 PowerSensorSampler::PowerSensorSampler(void) 
-  : DataSource("Power, Current","float, float") // from DataSource
+  : DataSource("CurrentState, VoltageState","float, float"), INA(0x40) // from DataSource
 {}
 
 
@@ -15,7 +15,15 @@ void PowerSensorSampler::init(void)
   {
     Serial.println("could not connect. Fix and Reboot");
   }
-  INA.setMaxCurrentShunt(1, 0.1);hgff
+
+  float shunt = 0.100;                      /* shunt (Shunt Resistance in Ohms). Lower shunt gives higher accuracy but lower current measurement range. Recommended value 0.020 Ohm. Min 0.001 Ohm */
+  float current_LSB_mA = 0.05;              /* current_LSB_mA (Current Least Significant Bit in milli Amperes). Recommended values: 0.050, 0.100, 0.250, 0.500, 1, 2, 2.5 (in milli Ampere units) */
+  float current_zero_offset_mA = 0;         /* current_zero_offset_mA (Current Zero Offset in milli Amperes, default = 0) */
+  uint16_t bus_V_scaling_e4 = 10000;        /* bus_V_scaling_e4 (Bus Voltage Scaling Factor, default = 10000) */
+
+  if(INA.configure(shunt, current_LSB_mA, current_zero_offset_mA, bus_V_scaling_e4)){
+    Serial.println("\n***** Configuration Error! Chosen values outside range *****\n");
+  } 
 }
 
 
@@ -23,7 +31,7 @@ void PowerSensorSampler::updateState(void)
 // This function is called in the main loop of Default_Robot.ino
 {
   CurrentState = INA.getCurrent_mA();
-  PowerState = INA.getPower_mW();
+  VoltageState = INA.getShuntVoltage_mV();
 }
 
 
@@ -31,7 +39,7 @@ String PowerSensorSampler::printState(void)
 // This function returns a string that the Printer class 
 // can print to the serial monitor if desired
 {
-  return "Power: " + String(PowerState) + " mW, Current: " + String(CurrentState) + " mA";
+  return "Voltage: " + String(VoltageState) + " mV, Current: " + String(CurrentState) + " mA";
 }
 
 size_t PowerSensorSampler::writeDataBytes(unsigned char * buffer, size_t idx)
@@ -39,6 +47,6 @@ size_t PowerSensorSampler::writeDataBytes(unsigned char * buffer, size_t idx)
 {
   float * data_slot = (float *) &buffer[idx];
   data_slot[0] = CurrentState;
-  data_slot[1] = PowerState;
-  return idx + sizeof(2*float);
+  data_slot[1] = VoltageState;
+  return idx + sizeof(2*sizeof(float));
 }

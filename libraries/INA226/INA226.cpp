@@ -57,6 +57,7 @@ bool INA226::begin()
 bool INA226::isConnected()
 {
   _wire->beginTransmission(_address);
+  Serial.println((_wire == &Wire1) ? "Using Wire1" : "Using Wire/Unknown");
   return ( _wire->endTransmission() == 0);
 }
 

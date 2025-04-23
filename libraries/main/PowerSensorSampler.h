@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "DataSource.h"
 #include "Pinouts.h"
+#include "Wire.h"
+#include "INA226.h"
 
 
 
@@ -15,7 +17,8 @@ public:
   void init(void);
 
   // Managing state
-  float PowerState;
+  INA226 INA;
+  float VoltageState;
   float CurrentState;
   void updateState(void);
   String printState(void);

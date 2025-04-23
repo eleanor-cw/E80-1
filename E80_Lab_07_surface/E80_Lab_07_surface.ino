@@ -64,7 +64,7 @@ void setup() {
   logger.include(&adc);
   logger.include(&ef);
   //logger.include(&button_sampler);
-  logger.include(&power_sampler)
+  logger.include(&power_sampler);
   logger.init();
 
   printer.init();
@@ -105,6 +105,7 @@ void setup() {
 
 void loop() {
   currentTime=millis();
+
     
   if ( currentTime-printer.lastExecutionTime > LOOP_PERIOD ) {
     printer.lastExecutionTime = currentTime;
@@ -144,11 +145,12 @@ void loop() {
     //   else {
     //     surface_control.atPoint = false;   // get ready to go to the next point
     //   }
-       if (currentTime < 60000) {
-            motor_driver.drive(0,0,0);
+       if (currentTime > 10000 && currentTime<15000) {
+            motor_driver.drive(0,255,0);
    }
       else {
-      motor_driver.drive(surface_control.uR,30,surface_control.uL);
+      //motor_driver.drive(surface_control.uR,30,surface_control.uL);
+      motor_driver.drive(0,0,0);
     }
   }
   
