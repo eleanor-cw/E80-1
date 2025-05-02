@@ -1,0 +1,33 @@
+%file 53
+rotarysens=-u./10000*(180/pi);
+for i= 1:length(headingIMU)
+    if headingIMU(i)<0       
+    headingRobot(i)=headingIMU(i)+180;
+    else
+    headingRobot(i)= headingIMU(i)-180;
+    end
+end
+%noticed a 30 degreee error when cheking IMU claibration
+trueheadingrobot= headingRobot-30;
+%Estimate wind as longest period of 0 degree rotatry output
+avgwind= mean(headingIMU(1236:1275))-30;
+avgwind= avgwind*ones(size(headingIMU));
+figure(1)
+clf
+plot(headingRobot)
+hold on
+plot(trueheadingrobot)
+plot(avgwind)
+plot(rotarysens)
+plot(headingIMU)
+legend('Unadjusted robot heading','Adjusted robot heading', 'Estimated wind direction'...
+    , 'Rotary sensor output','heading')
+xlabel("Samples")
+ylabel("Degrees")
+title("Wind Correction Analysis (N=0 degrees)")
+xlim([457 1769])
+
+%note large imu spikes in  -30-> -180 degree range
+%note imu was  facing  the back of the bot
+
+
