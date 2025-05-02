@@ -16,7 +16,7 @@ plot(pdana)
 hold on
 plot(pdanaprime)
 plot(pcal)
-legend('Dana point', 'Shifted dana point','Post-processing claibration')
+legend('Dana point', 'Shifted dana point','Post-processing calibration')
 title('Pressure and Power Sensor Data Analysis')
 xlabel("Samples")
 ylabel("Sensor output (V)")
