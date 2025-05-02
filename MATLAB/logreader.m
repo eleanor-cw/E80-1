@@ -1,10 +1,11 @@
+
 % logreader.m
 % Use this script to read data from your micro SD card
 
-clear;
+%clear;
 %clf;
 
-filenum = '053'; % file number for the data you want to read
+filenum ='030' ; % file number for the data you want to read
 infofile = strcat('INF', filenum, '.TXT');
 datafile = strcat('LOG', filenum, '.BIN');
 
@@ -46,3 +47,4 @@ end
 fclose(fid);
 
 %% Process your data here
+A00=double(A00);

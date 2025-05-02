@@ -11,7 +11,7 @@
 #define BYTES_PER_BLOCK 256
 // number of blocks in the buffer
 #define BUFFER_BLOCK_COUNT 5
-#define MAX_NUM_DATASOURCES 10
+#define MAX_NUM_DATASOURCES 12
 
 #include <Arduino.h>
 #include <SPI.h>

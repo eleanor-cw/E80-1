@@ -1,10 +1,10 @@
 #include "PowerSensorSampler.h"
 #include "Printer.h"
-
 extern Printer printer;
 
 PowerSensorSampler::PowerSensorSampler(void) 
-  : DataSource("CurrentState, VoltageState","float, float"), INA(0x40) // from DataSource
+  : DataSource("CurrentState,VoltageState","float,float")
+  // from DataSource
 {}
 
 
@@ -48,5 +48,5 @@ size_t PowerSensorSampler::writeDataBytes(unsigned char * buffer, size_t idx)
   float * data_slot = (float *) &buffer[idx];
   data_slot[0] = CurrentState;
   data_slot[1] = VoltageState;
-  return idx + sizeof(2*sizeof(float));
+  return idx + 2*sizeof(float);
 }

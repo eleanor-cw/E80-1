@@ -62,9 +62,10 @@ void setup() {
   logger.include(&surface_control);
   logger.include(&motor_driver);
   logger.include(&adc);
+  logger.include(&power_sampler);
   logger.include(&ef);
   //logger.include(&button_sampler);
-  logger.include(&power_sampler);
+
   logger.init();
 
   printer.init();
@@ -145,11 +146,25 @@ void loop() {
     //   else {
     //     surface_control.atPoint = false;   // get ready to go to the next point
     //   }
-       if (currentTime > 10000 && currentTime<15000) {
-            motor_driver.drive(0,255,0);
+    //mass vs acceleration
+       if (currentTime > 60000 && currentTime<120000) {
+            motor_driver.drive(255, 255, 255);
    }
-      else {
-      //motor_driver.drive(surface_control.uR,30,surface_control.uL);
+   //Wind claibration period
+  //      else if (currentTime > 100000 && currentTime<105000) {
+  //           motor_driver.drive(0,0,0);
+          
+  //  }
+
+  //     else if (currentTime> 105000 && currentTime< 135000) {
+  //     //motor_driver.drive(surface_control.uR,30,surface_control.uL);
+  //     motor_driver.drive(surface_control.uR,100,surface_control.uL);
+  //   }
+  //    else if (currentTime> 135000 && currentTime< 165000) {
+  //     //motor_driver.drive(surface_control.uR,30,surface_control.uL);
+  //     motor_driver.drive(-surface_control.uL,-100,-surface_control.uR);
+  //   }
+    else{
       motor_driver.drive(0,0,0);
     }
   }

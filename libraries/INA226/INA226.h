@@ -78,7 +78,7 @@ class INA226
 {
 public:
   //  address between 0x40 and 0x4F
-  explicit INA226(const uint8_t address, TwoWire *wire = &Wire1);
+  explicit INA226(const uint8_t address = 0x40, TwoWire *wire = &Wire1);
 
   bool     begin();
   bool     isConnected();
