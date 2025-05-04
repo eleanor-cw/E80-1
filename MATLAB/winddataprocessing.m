@@ -17,14 +17,14 @@ figure(1)
 clf
 plot(trueheadingRobot)
 hold on
-plot(avgwind)
+plot(avgwind,'Color', [1, 0.5, 0])
 plot(rotarysens)
 plot(headingIMU)
 % Highlight the section used for average wind (samples 1236 to 1275)
 %To
 yl = ylim;
 fill([1236 1275 1275 1236], [yl(1) yl(1) yl(2) yl(2)], ...
-     [1 0 0], ...        % RGB color: [R G B], where 1 = white, 0 = black
+     [1 .5 0], ...        % RGB color: [R G B], where 1 = white, 0 = black
      'FaceAlpha', 0.5, ...     % Transparency: 0 = fully transparent, 1 = opaque
      'EdgeColor', 'none', ...  % Border color; set to 'none' to remove edge
      'DisplayName', 'Wind estimate region')
@@ -34,7 +34,7 @@ text(1100, yl(2) - 10, {'Avg wind', 'calc region'}, ...
      'VerticalAlignment', 'top', ...
      'FontSize', 8, ...
      'FontWeight', 'bold', ...
-     'Color', [1 0 0])  % Change color as desired
+     'Color', [1 .5 0])  % Change color as desired
 %Graph settings
 legend('Adjusted robot heading', 'Estimated wind direction'...
     , 'Rotary sensor output', 'IMU ouput')
