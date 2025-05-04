@@ -15,11 +15,11 @@ avgwind= mean(headingIMU(1236:1275))+180-30;
 avgwind= avgwind*ones(size(headingIMU));
 figure(1)
 clf
-plot(trueheadingRobot)
+plot(trueheadingRobot,'Color', [1,0,0], 'LineWidth',1.5)
 hold on
-plot(avgwind,'Color', [1, 0.5, 0])
-plot(rotarysens)
-plot(headingIMU)
+plot(avgwind,'Color', [1, 0.5, 0], 'LineWidth', 1.5)
+plot(rotarysens,'Color', [0,0,1],'LineWidth', 1.5)
+plot(headingIMU,'LineWidth', 2)
 % Highlight the section used for average wind (samples 1236 to 1275)
 %To
 yl = ylim;
@@ -37,7 +37,7 @@ text(1100, yl(2) - 10, {'Avg wind', 'calc region'}, ...
      'Color', [1 .5 0])  % Change color as desired
 %Graph settings
 legend('Adjusted robot heading', 'Estimated wind direction'...
-    , 'Rotary sensor output', 'IMU ouput')
+    , 'Rotary sensor output', 'IMU ouput','Location', 'northeast', 'FontSize', 5)
 xlabel("Samples")
 ylabel("Degrees")
 title("Wind Correction Analysis (N=0 degrees)")
